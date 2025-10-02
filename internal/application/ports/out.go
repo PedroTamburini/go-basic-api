@@ -15,7 +15,7 @@ type UsuarioRespositorio interface {
 // TokenServico define a porta de saída para operações de gerenciamento de sessão
 type TokenServico interface {
 	GerarToken(idUsuario, cargo string) (string, error)
-	ValidarToken(tokenString string) (string, error)
+	ValidarToken(tokenString string) (string, string, error)
 }
 
 // HasherDeSenha define a porta de saída para operações de criptografia de senhas
