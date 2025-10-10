@@ -1,0 +1,324 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/login": {
+            "post": {
+                "description": "Realiza o login de um usuário e retorna um token JWT.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Autenticação"
+                ],
+                "summary": "Logar usuário",
+                "parameters": [
+                    {
+                        "description": "Credenciais do usuário",
+                        "name": "credenciais",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.RequisicaoDeLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Token JWT",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Requisição inválida",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Credenciais inválidas ou usuário não aprovado",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/usuarios/pendentes": {
+            "get": {
+                "description": "Retorna uma lista de usuários com status pendente. (Exige autenticação de atendente/admin)",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Buscar usuários pendentes",
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuários pendentes",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Usuario"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/usuarios/registrar": {
+            "post": {
+                "description": "Realiza o registro de um novo usuário no sistema.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Registrar novo usuário",
+                "parameters": [
+                    {
+                        "description": "Dados do usuário para registro",
+                        "name": "usuario",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.RequisicaoDeRegistroDeUsuario"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Usuário registrado com sucesso",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Usuario"
+                        }
+                    },
+                    "400": {
+                        "description": "Requisição inválida",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/usuarios/{id}/aprovar": {
+            "put": {
+                "description": "Aprova o cadastro de um usuário pendente. (Exige autenticação de atendente/admin)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Aprovar usuário",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID do usuário a ser aprovado",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuário aprovado com sucesso",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Usuario"
+                        }
+                    },
+                    "400": {
+                        "description": "Requisição inválida",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuário não encontrado",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Erro interno do servidor",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.Usuario": {
+            "type": "object",
+            "properties": {
+                "atualizado_em": {
+                    "type": "string"
+                },
+                "cargo": {
+                    "type": "string"
+                },
+                "cpf": {
+                    "type": "string"
+                },
+                "criado_em": {
+                    "type": "string"
+                },
+                "data_nascimento": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "matricula": {
+                    "type": "string"
+                },
+                "nome": {
+                    "type": "string"
+                },
+                "setor": {
+                    "type": "string"
+                },
+                "sexo": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "telefone": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.RequisicaoDeLogin": {
+            "type": "object",
+            "required": [
+                "email",
+                "senha"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "senha": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.RequisicaoDeRegistroDeUsuario": {
+            "type": "object",
+            "required": [
+                "cargo",
+                "cpf",
+                "data_nascimento",
+                "email",
+                "matricula",
+                "none",
+                "senha",
+                "setor",
+                "sexo",
+                "telefone"
+            ],
+            "properties": {
+                "cargo": {
+                    "type": "string"
+                },
+                "cpf": {
+                    "type": "string"
+                },
+                "data_nascimento": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "matricula": {
+                    "type": "string"
+                },
+                "none": {
+                    "type": "string"
+                },
+                "senha": {
+                    "type": "string",
+                    "minLength": 8
+                },
+                "setor": {
+                    "type": "string"
+                },
+                "sexo": {
+                    "type": "string"
+                },
+                "telefone": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,217 @@
+definitions:
+  domain.Usuario:
+    properties:
+      atualizado_em:
+        type: string
+      cargo:
+        type: string
+      cpf:
+        type: string
+      criado_em:
+        type: string
+      data_nascimento:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      matricula:
+        type: string
+      nome:
+        type: string
+      setor:
+        type: string
+      sexo:
+        type: string
+      status:
+        type: string
+      telefone:
+        type: string
+    type: object
+  dto.RequisicaoDeLogin:
+    properties:
+      email:
+        type: string
+      senha:
+        type: string
+    required:
+    - email
+    - senha
+    type: object
+  dto.RequisicaoDeRegistroDeUsuario:
+    properties:
+      cargo:
+        type: string
+      cpf:
+        type: string
+      data_nascimento:
+        type: string
+      email:
+        type: string
+      matricula:
+        type: string
+      none:
+        type: string
+      senha:
+        minLength: 8
+        type: string
+      setor:
+        type: string
+      sexo:
+        type: string
+      telefone:
+        type: string
+    required:
+    - cargo
+    - cpf
+    - data_nascimento
+    - email
+    - matricula
+    - none
+    - senha
+    - setor
+    - sexo
+    - telefone
+    type: object
+info:
+  contact: {}
+paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Realiza o login de um usuário e retorna um token JWT.
+      parameters:
+      - description: Credenciais do usuário
+        in: body
+        name: credenciais
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RequisicaoDeLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token JWT
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Requisição inválida
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Credenciais inválidas ou usuário não aprovado
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Erro interno do servidor
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Logar usuário
+      tags:
+      - Autenticação
+  /usuarios/{id}/aprovar:
+    put:
+      consumes:
+      - application/json
+      description: Aprova o cadastro de um usuário pendente. (Exige autenticação de
+        atendente/admin)
+      parameters:
+      - description: ID do usuário a ser aprovado
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Usuário aprovado com sucesso
+          schema:
+            $ref: '#/definitions/domain.Usuario'
+        "400":
+          description: Requisição inválida
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Usuário não encontrado
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Erro interno do servidor
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Aprovar usuário
+      tags:
+      - Usuarios
+  /usuarios/pendentes:
+    get:
+      description: Retorna uma lista de usuários com status pendente. (Exige autenticação
+        de atendente/admin)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Lista de usuários pendentes
+          schema:
+            items:
+              $ref: '#/definitions/domain.Usuario'
+            type: array
+        "500":
+          description: Erro interno do servidor
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Buscar usuários pendentes
+      tags:
+      - Usuarios
+  /usuarios/registrar:
+    post:
+      consumes:
+      - application/json
+      description: Realiza o registro de um novo usuário no sistema.
+      parameters:
+      - description: Dados do usuário para registro
+        in: body
+        name: usuario
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RequisicaoDeRegistroDeUsuario'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Usuário registrado com sucesso
+          schema:
+            $ref: '#/definitions/domain.Usuario'
+        "400":
+          description: Requisição inválida
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Erro interno do servidor
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Registrar novo usuário
+      tags:
+      - Usuarios
+swagger: "2.0"
