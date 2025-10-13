@@ -15,7 +15,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	"github.com/swaggo/swag/example/basic/docs"
+	"github.com/PedroTamburini/go-basic-api/docs"
 )
 
 func main() {
