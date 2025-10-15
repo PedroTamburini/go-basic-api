@@ -2,7 +2,7 @@ package dto
 
 // RequisicaoDeRegistroDeUsuario representa os dados necessários para registrar um novo usuário
 type RequisicaoDeRegistroDeUsuario struct {
-	Nome           string `json:"none" binding:"required"`
+	Nome           string `json:"nome" binding:"required"`
 	CPF            string `json:"cpf" binding:"required"`
 	Cargo          string `json:"cargo" binding:"required"`
 	Matricula      string `json:"matricula" binding:"required"`
